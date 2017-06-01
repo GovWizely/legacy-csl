@@ -4,16 +4,13 @@ sudo: true
 
 addons:
   code_climate:
-    repo_token: b2be59fc94d6de5b889a16c640227b42d40d8aa21df90fad79dd70f2687d630c
+    repo_token: 5e93d3e4af2fece06eccdaa94075cede7ff1c5d11a08757397db989b0056b850
   apt:
     packages:
       - oracle-java8-set-default
 
 before_install:
   - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.1.deb && sudo dpkg -i --force-confnew elasticsearch-5.2.1.deb && env && sudo service elasticsearch start
-
-notifications:
-  slack: govwizely:R9Nhshn0NO7eRh4ThXaMKqWw
 
 after_success:
   - bundle exec codeclimate-test-reporter
