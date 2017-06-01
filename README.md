@@ -1,17 +1,5 @@
-trade.gov Webservices
+Consolidated Screening List
 ==============
-
-The Webservices project lets you take pretty much any structured data set and turn it into a search API without writing a line of code.
-
-# Features
-
-* understands CSV, TSV, JSON, XLS, or XML file formats
-* smart guessing of data types and schemas based on heuristics
-* versioned APIs by default
-* ingest by file upload or URL
-* easy polling/refresh of URL-based data sources
-* simple YAML-based configuration for each data source
-* customize the ETL process via built-in transformations
 
 # Installation
 
@@ -77,22 +65,6 @@ Or using http headers:
 
     curl -H'Api-Key: devkey' 'http://localhost:3000/v2/consolidated_screening_list/search'
 
-### Dynamic APIs
-
-Admin users can create and administer search APIs from uploaded files or from URLs. The file formats supported 
-include CSV, TSV, JSON, XLS, and XML. The initial admin user created with the `db:devseed` task has the `admin` flag 
-set to true already. To toggle an existing user, you can do this from the Rails console:
-    
-    email = "admin@example.co"
-    u = User.search(query: { constant_score: { filter: { term: { email: email } } } }).first
-    u.update_attribute(:admin, true)
-
-To create an API, click the `+` next to the Dynamic APIs subnav heading.
-
-To refresh a URL-based api, you can periodically call the rake task to check for updates. Pass the `api` field from the DataSource as a parameter:
-
-    bundle exec rake endpointme:import[business_service_providers]
-
 ### Specs
 
     bundle exec rspec
@@ -107,23 +79,8 @@ After running your tests, view the report by opening `coverage/index.html`.
 
 Click around on the files that have less than 100% coverage to see what lines weren't exercised.
 
-### Mailcatcher
-
-We use [Mailcatcher](http://mailcatcher.me/) to test emails sent from dev environments. Their advice is not to add the gem to your Gemfile, so in order
-to use it please do:
-
-    gem install mailcatcher
-    mailcatcher
-
-If you use [RVM](https://rvm.io/), you should follow their [specific instructions](http://mailcatcher.me/) (search for "RVM") on how to install the gem.
-
-### Deployment
-
-If you want to run this app on AWS Opsworks, you may find [this guide](https://github.com/GovWizely/webservices/wiki/How-to:-set-up-a-fully-decoupled-AWS-Stack) helpful.
-
 ### Code Status
 
-* [![Build Status](https://travis-ci.org/GovWizely/webservices.svg?branch=master)](https://travis-ci.org/GovWizely/webservices/)
-* [![Test Coverage](https://codeclimate.com/github/GovWizely/webservices/badges/coverage.svg)](https://codeclimate.com/github/GovWizely/webservices)
-* [![Code Climate](https://codeclimate.com/github/GovWizely/webservices/badges/gpa.svg)](https://codeclimate.com/github/GovWizely/webservices)
-
+* [![Build Status](https://travis-ci.org/GovWizely/csl.svg?branch=master)](https://travis-ci.org/GovWizely/csl/)
+* [![Code Climate](https://codeclimate.com/github/GovWizely/csl/badges/gpa.svg)](https://codeclimate.com/github/GovWizely/csl)
+* [![Test Coverage](https://codeclimate.com/github/GovWizely/csl/badges/coverage.svg)](https://codeclimate.com/github/GovWizely/csl/coverage)
