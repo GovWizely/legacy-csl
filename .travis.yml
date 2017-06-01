@@ -1,16 +1,16 @@
-bundler_args: --without development staging production
+bundler_args: "--without development staging production"
 language: ruby
 sudo: true
-
 addons:
   code_climate:
-    repo_token: 5e93d3e4af2fece06eccdaa94075cede7ff1c5d11a08757397db989b0056b850
+    repo_token:
+      secure: kE8CB+eMEmSqP0UL5qiWSODxFvH/Oln1j4tWHmZ2fFzvZdHIYcYo+qN2xP2AJToCz7l2jt/sWih7uU5VXZOBvyC9vVQ0ERVRHzlgNRgY6BOH7S7i3mFanp+MV5/UubmdGFZlGpvgH6eJFTYU7LOrRP8S9gGJXIoqSL4R1ghU5ZpC96K3ODsa3pPCSi0tVn1eHEYECliS14Xwn2LgTiG4PH0vAG5fyCtwRZ0/7VwgYfOCkrGrXlaAvrNd6yuo4RrA0i0u++A5UHYxy10TDR3gnCddf4LHhBdD+8i/jvU5jmzdCMBDRoNANS0sBfK1bcUxc8fZKYIcUXavG4meQQsT0oDMr3Oj3dxwdawfymms7+heU1oKsAuk9CNGJJ1b3S+htwl5S8DLPdaLN/Pr0phX7Nbv5rajoAiBWRC6ljAMfp7oaDPULW883WsHiAZXqKCtAtN2aEwCLu3Wly4v8+3LVMaotXGAX2lY3ALygqWNrjVdlK/SKnmocRKO9poh2OSdwGMOIabnM4HMijPWkOj2C8mUe33U9bHP9eOLJ7d/mjKshzBjZUMmhX5+RqUgQJcd+MBdZXyWIFNW46Kd/qD2v5PFlHvHSwz4BQEl0kWouTJVfyvuXZN3T3mrvNCXqrSzB0TlJkjdqHQVusT4Pg9U+XP3wSuIcwo0ne/srRzihv0=
   apt:
     packages:
-      - oracle-java8-set-default
-
+    - oracle-java8-set-default
 before_install:
-  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.1.deb && sudo dpkg -i --force-confnew elasticsearch-5.2.1.deb && env && sudo service elasticsearch start
-
+- curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.2.1.deb
+  && sudo dpkg -i --force-confnew elasticsearch-5.2.1.deb && env && sudo service elasticsearch
+  start
 after_success:
-  - bundle exec codeclimate-test-reporter
+- bundle exec codeclimate-test-reporter
