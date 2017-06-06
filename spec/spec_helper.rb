@@ -38,6 +38,10 @@ RSpec.configure do |config|
   config.after(:suite) do
     ES.client.indices.delete_template name: 'one_shard'
   end
+
+  config.after(:each) do
+    Rails.cache.clear 
+  end
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:

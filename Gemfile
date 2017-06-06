@@ -15,8 +15,6 @@ gem 'nokogiri'
 gem 'rack-contrib'
 gem 'rake'
 gem 'sanitize'
-gem 'sidekiq'
-gem 'sidekiq-unique-jobs'
 gem 'typhoeus'
 
 group :production do

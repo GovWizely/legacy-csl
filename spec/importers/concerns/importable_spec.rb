@@ -141,11 +141,11 @@ describe Importable do
       MockData.new(batch_1).import
       expect(stored_docs).to match_array([a_hash_including(content: 'foo'),
                                           a_hash_including(content: 'bar'),],)
-
+      Rails.cache.clear
       MockData.new(batch_2).import
       expect(stored_docs).to match_array([a_hash_including(content: 'foo [updated]'),
                                           a_hash_including(content: 'baz'),],)
-
+      Rails.cache.clear
       MockData.new(batch_3).import
       expect(stored_docs).to match_array([a_hash_including(content: 'baz [updated]')])
     end

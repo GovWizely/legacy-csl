@@ -4,7 +4,7 @@ class RecreateIndicesWithModifiedMappings
       model_classes_which_need_recreating.each do |model_class|
         Rails.logger.info("Recreating index and importing #{model_class}")
         model_class.recreate_index
-        ImportWorker.perform_async(model_class.importer_class.name)
+        model_class.importer_class.new.import
       end
     end
 

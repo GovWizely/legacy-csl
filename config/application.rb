@@ -31,7 +31,7 @@ module Webservices
 
     config.exceptions_app = routes
 
-    config.cache_store = :memory_store
+    config.cache_store = :redis_store, "redis://localhost:6379/0/cache", { expires_in: 60.minutes }
 
     def model_classes
       filenames = Dir[Rails.root.join('app/models/**/*.rb').to_s]

@@ -13,10 +13,18 @@ module CanImportAllSources
     end
 
     def import_all_sources
+      rescued_errors = []
+      
       importers.each do |i|
-        ImportWorker.perform_async(i.name)
+        begin
+          i.new.import
+        rescue => e
+          Rails.logger.error e
+          rescued_errors.push e
+        end
       end
-      true
+
+      rescued_errors
     end
   end
 end

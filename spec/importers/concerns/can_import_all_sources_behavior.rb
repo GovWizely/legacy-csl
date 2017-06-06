@@ -22,9 +22,9 @@ shared_examples_for 'CanImportAllSources' do
   describe '.import_all_sources' do
     subject { described_class.import_all_sources }
 
-    it 'kicks off background import jobs for each importer' do
+    it 'runs each importer' do
       described_class.importers.each do |i|
-        expect(ImportWorker).to receive(:perform_async).with(i.name)
+        expect(i).to receive_message_chain(:new, :import)
       end
       subject
     end

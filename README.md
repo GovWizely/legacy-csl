@@ -50,8 +50,6 @@ Import some data:
 
     bundle exec rake ita:import[ScreeningList]
 
-Admin users can log in and monitor the progress of the Sidekiq import jobs via `/sidekiq`.
-
 #### Examples
 
 <http://localhost:3000/consolidated_screening_list/search?size=5&offset=8>

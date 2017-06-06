@@ -3,12 +3,29 @@ namespace :ita do
   task :import, [:arg] => :environment do |_t, args|
     args.to_a.each do |module_or_importer_class_name|
       module_or_importer_class = module_or_importer_class_name.constantize
+      import_start_time = DateTime.now.utc
+
       if module_or_importer_class.respond_to?(:import_all_sources)
-        module_or_importer_class.import_all_sources
+        rescued_errors = module_or_importer_class.import_all_sources
+        search_class = (module_or_importer_class_name + '::Consolidated').constantize
       elsif !module_or_importer_class_name.constantize.disabled?
-        ImportWorker.perform_async(module_or_importer_class_name)
+        module_or_importer_class_name.constantize.new.import
+        search_class = module_or_importer_class_name.constantize.model_class
       else
         puts 'Nothing to do.'
+        break
+      end
+
+      # Only clear cache if there is new data from at least one source:
+      search_class.search_for(size: 1)[:sources_used].each do |sources_hash|
+        if sources_hash[:source_last_updated].present? && Time.parse(sources_hash[:source_last_updated]) > import_start_time
+          Rails.cache.clear
+          break
+        end
+      end
+
+      if rescued_errors && !rescued_errors.empty?
+        raise rescued_errors[0]
       end
     end
   end
