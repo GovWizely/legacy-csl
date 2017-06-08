@@ -32,38 +32,33 @@ Otherwise, follow the [instructions](http://www.elasticsearch.org/download/) to 
 
 You'll need to have redis installed on your machine. `brew install redis`, `apt-get install redis-server`, etc.
 
+### Configuration
+
+Copy config/csl.yml.example to config/csl.yml and edit if necessary.
+
 ### Running it
 
 Create the indexes:
 
     bundle exec rake db:create
     
-Generate the default admin user with username `admin@example.co` and password `1nitial_pwd`:
-
-    bundle exec rake db:devseed    
-
 Fire up a server:
 
-    bundle exec rails s thin
+    bundle exec rails s
     
-Import some data:    
+Import some data:
+
     bundle exec rake ita:import[ScreeningList]
 
 Admin users can log in and monitor the progress of the Sidekiq import jobs via `/sidekiq`.
 
-#### Authentication
+#### Examples
 
-Since v2 of the API, an authentication token is required for every request. Pass it on the query string:
+<http://localhost:3000/consolidated_screening_list/search?size=5&offset=8>
 
-<http://localhost:3000/consolidated_screening_list/search?api_key=devkey&size=5&offset=8>
+<http://localhost:3000/consolidated_screening_list/search?q=john>
 
-<http://localhost:3000/consolidated_screening_list/search?api_key=devkey&q=john>
-
-<http://localhost:3000/consolidated_screening_list/search?api_key=devkey&sources=SDN,EL>
-
-Or using http headers:
-
-    curl -H'Api-Key: devkey' 'http://localhost:3000/v2/consolidated_screening_list/search'
+<http://localhost:3000/consolidated_screening_list/search?sources=SDN,EL>
 
 ### Specs
 

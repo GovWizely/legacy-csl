@@ -18,3 +18,5 @@
 /capistrano
 dump.rdb
 /elasticsearch.yml
+
+/config/csl.yml

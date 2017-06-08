@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-shared_context 'with an adjusted ItaTaxonomy.mappings' do
-  let(:model) { ItaTaxonomy }
+shared_context 'with an adjusted ScreeningList::Uvl.mappings' do
+  let(:model) { ScreeningList::Uvl }
   before do
     @original_mappings = model.mappings.deep_dup
-    model.mappings[model.index_type][:properties][:label][:analyzer] = 'keyword'
+    model.mappings[model.index_type][:properties][:name][:analyzer] = 'keyword'
   end
   after do
     model.mappings = @original_mappings
@@ -16,7 +16,7 @@ describe RecreateIndicesWithModifiedMappings do
   before(:all) { Webservices::Application.model_classes.each(&:recreate_index) }
 
   describe '.call' do
-    include_context 'with an adjusted ItaTaxonomy.mappings'
+    include_context 'with an adjusted ScreeningList::Uvl.mappings'
 
     it 'recreates and imports necessary indices' do
       expect(described_class.model_classes_which_need_recreating).to eq([model])
@@ -35,8 +35,8 @@ describe RecreateIndicesWithModifiedMappings do
       it { is_expected.to be_empty }
     end
 
-    context 'when ItaTaxonomy mappings are different from DB' do
-      include_context 'with an adjusted ItaTaxonomy.mappings'
+    context 'when ScreeningList::Uvl mappings are different from DB' do
+      include_context 'with an adjusted ScreeningList::Uvl.mappings'
       it { is_expected.to eq([model]) }
     end
 

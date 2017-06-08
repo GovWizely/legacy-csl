@@ -1,7 +1,6 @@
 module Importable
   include XMLUtils
   include HTMLEntityUtils
-  include TaxonomyMethods
   extend ActiveSupport::Concern
   # The module provides functionality useful for importing source data, and
   # can be included into any class that will do so.
@@ -57,15 +56,6 @@ module Importable
       name == '<undetermined>' ? nil : name
     else
       country_str
-    end
-  end
-
-  def normalize_industry(industry)
-    return nil unless Rails.application.config.enable_industry_mapping_lookup
-
-    source = model_class.to_s
-    Rails.cache.fetch("#{source}/#{industry}", expires_in: 90.seconds) do
-      IndustryMappingClient.map_industry(industry, source)
     end
   end
 

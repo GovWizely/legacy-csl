@@ -2,11 +2,10 @@ require 'spec_helper'
 
 describe 'Consolidated Screening List API V2', type: :request do
   include_context 'all CSL fixture data'
-  include_context 'V2 headers'
 
   describe 'GET /consolidated_screening_list/search' do
     let(:params) { { size: -1 } }
-    before { get '/v2/consolidated_screening_list/search', params, @v2_headers }
+    before { get '/v2/consolidated_screening_list/search', params }
 
     context 'when search parameters are empty' do
       subject { response }
@@ -387,7 +386,7 @@ describe 'Consolidated Screening List API V2', type: :request do
     describe 'GET /consolidated_screening_list/search.csv' do
       before do
         allow(StaticFileManager).to receive(:download_file).and_return(ResponseDummy.new)
-        get '/v2/consolidated_screening_list/search.csv', {}, @v2_headers
+        get '/v2/consolidated_screening_list/search.csv'
       end
       it 'is a CSV' do
         expect(response.status).to eq(200)
@@ -399,7 +398,7 @@ describe 'Consolidated Screening List API V2', type: :request do
     describe 'GET /consolidated_screening_list/search.tsv' do
       before do
         allow(StaticFileManager).to receive(:download_file).and_return(ResponseDummy.new)
-        get '/v2/consolidated_screening_list/search.tsv', {}, @v2_headers
+        get '/v2/consolidated_screening_list/search.tsv'
       end
       it 'is a TSV' do
         expect(response.status).to eq(200)
@@ -416,7 +415,7 @@ describe 'Consolidated Screening List API V2', type: :request do
       }
     end
 
-    before { get '/v2/consolidated_screening_list/search', params, @v2_headers }
+    before { get '/v2/consolidated_screening_list/search', params }
     subject { response }
     it_behaves_like 'a successful search request'
 
@@ -434,7 +433,7 @@ describe 'Consolidated Screening List API V2', type: :request do
       }
     end
 
-    before { get '/v2/consolidated_screening_list/search', params, @v2_headers }
+    before { get '/v2/consolidated_screening_list/search', params }
     subject { response }
     it_behaves_like 'a successful search request'
 
@@ -454,7 +453,7 @@ describe 'Consolidated Screening List API V2', type: :request do
       }
     end
 
-    before { get '/v2/consolidated_screening_list/search', params, @v2_headers }
+    before { get '/v2/consolidated_screening_list/search', params }
     subject { response }
     it_behaves_like 'a successful search request'
 
@@ -473,7 +472,7 @@ describe 'Consolidated Screening List API V2', type: :request do
       }
     end
 
-    before { get '/v2/consolidated_screening_list/search', params, @v2_headers }
+    before { get '/v2/consolidated_screening_list/search', params }
     subject { response }
     it_behaves_like 'a successful search request'
 

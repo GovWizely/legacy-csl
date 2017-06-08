@@ -2,10 +2,11 @@ require File.expand_path('../boot', __FILE__)
 
 # Pick the frameworks you want:
 # require "active_record/railtie"
+require 'active_model/railtie'
 require 'action_controller/railtie'
-require 'action_mailer/railtie'
-require 'sprockets/railtie'
-require 'rails/test_unit/railtie'
+# require 'action_mailer/railtie'
+# require 'sprockets/railtie'
+# require 'rails/test_unit/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, :staging or :production.
@@ -16,9 +17,6 @@ module Webservices
     config.eager_load_paths += Dir["#{config.root}/lib/**/"]
     config.eager_load_paths += Dir["#{config.root}/app/importers/**/"]
     config.eager_load_paths += Dir["#{config.root}/app/workers/"]
-
-    require 'ext/string'
-    require 'ext/hash'
 
     # Disable the asset pipeline.
     config.assets.enabled = false
@@ -49,19 +47,6 @@ module Webservices
 
     # enable url shortener to shorten entries' urls.
     config.enable_bitly_lookup = true
-    config.enable_industry_mapping_lookup = true
-
-    config.restforce = {
-      api_version:   'replace_with_real_value',
-      client_id:     'replace_with_real_value',
-      client_secret: 'replace_with_real_value',
-      host:          'replace_with_real_value',
-      username:      'replace_with_real_value',
-      password:      'replace_with_real_value',
-    }
-
-    config.salesforce_url = 'not_a_real_URL/'
-    config.endpointme_url = 'http://localhost:3000'
 
     config.aws_credentials = {
       access_key_id:     'fake_value',

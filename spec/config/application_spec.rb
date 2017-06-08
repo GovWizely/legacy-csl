@@ -7,6 +7,5 @@ describe Webservices::Application do
     it { is_expected.to include(ScreeningList::Dpl) }
 
     it { is_expected.not_to include(ScreeningList::Consolidated) }
-    it { is_expected.not_to include(SalesforceArticle::FaqData) }
   end
 end

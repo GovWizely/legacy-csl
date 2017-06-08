@@ -12,13 +12,6 @@ class Query
 
   validates_numericality_of :offset, greater_than_or_equal_to: 0, allow_nil: true
 
-  class_attribute :aggregation_terms
-  self.aggregation_terms = {}
-
-  def self.aggregate_terms_by(terms)
-    self.aggregation_terms = terms
-  end
-
   def self.query_fields=(value)
     class_variable_set('@@fields', value)
   end
@@ -88,7 +81,6 @@ class Query
   def generate_search_body
     Jbuilder.encode do |json|
       generate_query_and_filter(json)
-      generate_aggregations(json)
     end
   end
 
@@ -107,10 +99,6 @@ class Query
         json.query query
       end
     end if query
-  end
-
-  def generate_terms(json, field, filter_value)
-    json.terms { json.set! field, filter_value }
   end
 
   def query_from_fields(json, fields)
@@ -150,18 +138,6 @@ class Query
     end if fields[:filter].map { |f| send(f) }.any?
   end
 
-  def terms_filter_from_field_mapping(json, field_mapping)
-    json.filter do
-      json.bool do
-        json.must do
-          field_mapping.each do |field, filter_value|
-            json.child! { generate_terms(json, field, filter_value) } if filter_value
-          end
-        end
-      end
-    end if field_mapping.values.any?
-  end
-
   def filter_from_fields_child(json, field, search)
     json.query { generate_match(json, field, search) }
   end
@@ -198,33 +174,8 @@ class Query
     raise Exceptions::InvalidDateRangeFormat
   end
 
-  def generate_aggregations(json)
-    json.aggs do
-      aggregation_terms.each do |k, v|
-        json.set! k do
-          json.terms do
-            json.field v[:field]
-            json.size v[:size] || UNLIMITED
-          end
-        end
-      end
-    end
-  end
-
-  def set_geo_instance_variables(options)
-    @countries = split_to_array(options[:countries].upcase) if options[:countries].present?
-    @trade_regions = split_to_array(options[:trade_regions]) if options[:trade_regions].present?
-    @world_regions = split_to_array(options[:world_regions]) if options[:world_regions].present?
-  end
-
   def split_to_array(value)
     value.split(',').map(&:strip)
-  end
-
-  def generate_geo_filters(json, country_field)
-    json.child! { json.terms { json.set! country_field, @countries } } if @countries
-    json.child! { json.terms { json.trade_regions @trade_regions } } if @trade_regions
-    json.child! { json.terms { json.world_regions @world_regions } } if @world_regions
   end
 
   private

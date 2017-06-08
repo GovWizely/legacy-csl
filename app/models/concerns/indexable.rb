@@ -3,7 +3,6 @@ module Indexable
 
   # We include Searchable as a dependency, which provides the ability to search
   # for docs via the index defined by is module.
-  include Findable
   include Searchable
 
   included do
