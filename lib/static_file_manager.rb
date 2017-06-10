@@ -1,7 +1,7 @@
 require 'aws-sdk-core'
 
 class StaticFileManager
-  CREDENTIALS = Aws::Credentials.new(Rails.configuration.aws_credentials[:access_key_id], Rails.configuration.aws_credentials[:secret_access_key])
+  CREDENTIALS = Aws::Credentials.new(Rails.configuration.csl.aws_credentials[:access_key_id], Rails.configuration.csl.aws_credentials[:secret_access_key])
 
   def self.upload_all_files(search_class)
     s3_client = get_s3_client
@@ -20,6 +20,6 @@ class StaticFileManager
   private
 
   def self.get_s3_client
-    Aws::S3::Client.new(region: Rails.configuration.aws_credentials[:region], credentials: CREDENTIALS)
+    Aws::S3::Client.new(region: Rails.configuration.csl.aws_credentials[:region], credentials: CREDENTIALS)
   end
 end

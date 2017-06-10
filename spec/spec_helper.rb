@@ -1,5 +1,7 @@
 require 'simplecov'
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' do
+  add_filter '.bundle'
+end
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
@@ -18,7 +20,7 @@ VCR.configure do |c|
   c.hook_into :webmock
   c.debug_logger = File.open('log/vcr.log', 'w')
   c.default_cassette_options = { record: :none }
-  c.filter_sensitive_data('<BITLY_API_TOKEN>') { Rails.configuration.bitly_api_token }
+  c.filter_sensitive_data('<BITLY_API_TOKEN>') { Rails.configuration.csl.bitly_api_token }
   c.configure_rspec_metadata!
 end
 
@@ -30,13 +32,10 @@ require Rails.root.join('spec/importers/concerns/can_import_all_sources_behavior
 RSpec.configure do |config|
   config.before(:suite) do
     ES.client.indices.put_template name: 'one_shard', body: { template: 'test:*', settings: { number_of_shards: 1, number_of_replicas: 0 } }
-    User.create_index!
     UrlMapper.recreate_index
-    ItaTaxonomy.recreate_index unless ItaTaxonomy.index_exists?
   end
 
   config.after(:suite) do
-    User.gateway.delete_index!
     ES.client.indices.delete_template name: 'one_shard'
   end
   # ## Mock Framework
@@ -68,8 +67,6 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-
-  config.include Devise::TestHelpers, type: :controller
 
   config.filter_run_excluding skip: true
 end

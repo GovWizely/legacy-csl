@@ -328,12 +328,18 @@ shared_examples 'it contains all ScreeningList::Uvl results' do
 end
 
 shared_examples 'it contains all ScreeningList::Uvl results that match "technology", sorted correctly' do
-  include_context 'full results from response'
   let(:source) { ScreeningList::Uvl }
   let(:expected) { [1, 4] }
+  include_context 'full results from response'
+  include_context 'expected results by source'
 
   it 'contains them all, sorted correctly' do
-    expect(got).to eq(expected)
+    aggregate_failures do
+      expect(full_results.count).to eq(expected_results.count)
+      expected_results.each_with_index do |expected_result, i|
+        expect(full_results[i]).to eq(expected_result)
+      end
+    end
   end
 end
 
