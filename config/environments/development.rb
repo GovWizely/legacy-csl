@@ -13,22 +13,10 @@ Webservices::Application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
 
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = {
-  #   address:              'localhost',
-  #   port:                 1025,
-  #   enable_starttls_auto: false,
-  #   openssl_verify_mode:  'none',
-  # }
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
   config.action_dispatch.default_headers['Access-Control-Allow-Origin'] = '*'
-
-  # config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
-
-  config.bitly_api_token = 'NOTAREALBITLYAPITOKENIHOPE'
 
   config.enable_bitly_lookup = false
 end

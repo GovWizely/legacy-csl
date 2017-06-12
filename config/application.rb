@@ -47,11 +47,5 @@ module Webservices
 
     # enable url shortener to shorten entries' urls.
     config.enable_bitly_lookup = true
-
-    config.aws_credentials = {
-      access_key_id:     'fake_value',
-      secret_access_key: 'fake_value',
-      region:            'us-east-1',
-    }
   end
 end

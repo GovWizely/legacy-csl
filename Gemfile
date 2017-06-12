@@ -24,8 +24,8 @@ group :production do
 end
 
 group :development, :test do
-  gem 'pry-rails'
   gem 'pry-byebug'
+  gem 'pry-rails'
   gem 'pry-remote'
   gem 'rspec-rails'
   gem 'thin'
