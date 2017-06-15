@@ -20,7 +20,7 @@ describe RecreateIndicesWithModifiedMappings do
 
     it 'recreates and imports necessary indices' do
       expect(described_class.model_classes_which_need_recreating).to eq([model])
-      expect(ImportWorker).to receive(:perform_async).with(model.importer_class.name)
+      expect(model.importer_class).to receive_message_chain(:new, :import)
 
       described_class.call
 

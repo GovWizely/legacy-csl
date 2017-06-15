@@ -27,12 +27,16 @@ module Searchable
     def search_for(options)
       query = query_class(options[:api_version]).new(options)
       search_options = build_search_options(query)
-      results = ES.client.search(search_options)
 
-      hits = results['hits']
-      hits[:aggregations] = results['aggregations']
-      hits[:offset] = query.offset
-      hits[:sources_used] = index_meta(query.try(:sources))
+      hits = Rails.cache.fetch(generate_cache_key(options), expires_in: 1.hour) do 
+        results = ES.client.search(search_options)
+        hits = results['hits']
+        hits[:aggregations] = results['aggregations']
+        hits[:offset] = query.offset
+        hits[:sources_used] = index_meta(query.try(:sources))
+        hits 
+      end
+
       hits[:search_performed_at] = search_performed_at
       hits.deep_symbolize_keys
     end
@@ -98,6 +102,10 @@ module Searchable
         stored_metadata = model.normalize_metadata(metadatas[model.index_name])
         build_model_metadata model.source, stored_metadata
       end
+    end
+
+    def generate_cache_key(options)
+      options.except(:api_key).reverse_merge({size: 10, offset: 0}).to_param
     end
 
     private

@@ -117,15 +117,38 @@ describe Searchable do
   end
 
   describe '#search_for' do
-    subject { MockModel.search_for({}) }
+    context 'metadata' do 
+      subject { MockModel.search_for({}) }
 
-    it 'response includes metadata' do
-      expect(subject.keys).to include(:sources_used, :search_performed_at)
-      expect(subject[:sources_used]).to eq([{ source_last_updated: '2001-01-01T01:01:01Z', last_imported: '2001-01-01T01:01:01Z', source: 'A mocked model', import_rate: '' }])
-      expect(subject[:search_performed_at]).to be_within(2).of(DateTime.now.utc)
+      it 'response includes metadata' do
+        expect(subject.keys).to include(:sources_used, :search_performed_at)
+        expect(subject[:sources_used]).to eq([{ source_last_updated: '2001-01-01T01:01:01Z', last_imported: '2001-01-01T01:01:01Z', source: 'A mocked model', import_rate: '' }])
+        expect(subject[:search_performed_at]).to be_within(2).of(DateTime.now.utc)
 
-      # too wide test for the description
-      expect(subject.keys).to match_array([:total, :max_score, :hits, :offset, :sources_used, :search_performed_at, :aggregations])
+        # too wide test for the description
+        expect(subject.keys).to match_array([:total, :max_score, :hits, :offset, :sources_used, :search_performed_at, :aggregations])
+      end
+    end
+
+    context 'caching' do
+      context "when cache is not present for a given request" do
+        it "writes elasticsearch response to the cache" do
+          params = {foo: 'Bar 1'}
+          expect(ES.client).to receive(:search).twice.and_call_original
+          result = MockModel.search_for(params)
+ 
+          cached_value = Rails.cache.fetch(MockModel.generate_cache_key(params))
+          expect(cached_value.deep_symbolize_keys).to eq(result.except(:search_performed_at))
+        end
+      end
+
+      context "when cache is present for a given request" do
+        it "does not send request to elasticsearch" do
+          MockModel.search_for({foo: 'Bar 1'})
+          expect(ES.client).not_to receive(:search)
+          MockModel.search_for({foo: 'Bar 1'})
+        end
+      end
     end
   end
 
@@ -134,6 +157,29 @@ describe Searchable do
 
     it 'contains correct fields' do
       expect(subject.keys).to include(:source, :source_last_updated, :last_imported, :import_rate)
+    end
+  end
+
+  describe '#generate_cache_key' do 
+    let(:params) do
+      params = {
+        "fuzzy_name" => "true",
+        "name" => "john doe"
+      }
+    end
+
+    context "when request does not include offset or size" do
+      it "generates cache key with default offset and size" do
+        expected_cache_key = {
+          "fuzzy_name" => "true",
+          "name" => "john doe",
+          "offset" => 0,
+          "size" => 10
+        }.to_param
+      
+        actual_cache_key = MockModel.generate_cache_key params
+        expect(actual_cache_key).to eq(expected_cache_key)
+      end
     end
   end
 end
