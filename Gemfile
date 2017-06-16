@@ -21,6 +21,7 @@ gem 'typhoeus'
 
 group :production do
   gem 'airbrake'
+  gem 'unicorn'
 end
 
 group :development, :test do
