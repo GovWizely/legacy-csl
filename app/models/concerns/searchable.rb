@@ -131,7 +131,7 @@ module Searchable
         body:  query.generate_search_body,
         from:  query.offset,
         size:  query.size,
-        sort:  query.sort,
+        sort:  query.sort
       }
 
       search_options[:type] = index_type if index_type
