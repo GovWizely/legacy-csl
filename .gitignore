@@ -19,4 +19,6 @@
 dump.rdb
 /elasticsearch.yml
 
+/config/airbrake.yml
 /config/csl.yml
+/config/newrelic.yml
