@@ -114,6 +114,7 @@ GEM
     minitest (4.7.5)
     multi_json (1.12.1)
     multipart-post (2.0.0)
+    newrelic_rpm (4.2.0.334)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
     nokogumbo (1.4.13)
@@ -256,6 +257,7 @@ DEPENDENCIES
   htmlentities
   iso_country_codes
   jbuilder
+  newrelic_rpm
   nokogiri
   pry-byebug
   pry-rails

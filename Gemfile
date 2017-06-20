@@ -21,6 +21,7 @@ gem 'typhoeus'
 
 group :production do
   gem 'airbrake'
+  gem 'newrelic_rpm'
   gem 'unicorn'
 end
 
