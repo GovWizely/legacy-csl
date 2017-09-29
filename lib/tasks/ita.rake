@@ -54,4 +54,10 @@ namespace :ita do
       end
     end
   end
+
+  desc 'restore from snapshot'
+  task :restore_from_snapshot, [:access_key, :secret_key, :region, :bucket, :snapshot_name] => :environment do |_t, args|
+    aws_params = args.to_hash.slice :access_key, :secret_key, :region, :bucket
+    ESSnapshotManager.restore aws_params, args[:snapshot_name]
+  end
 end
