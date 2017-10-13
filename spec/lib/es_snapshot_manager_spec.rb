@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ESSnapshotManager do
-  let(:index_pattern) { 'snapshot:webservices:screening_list:*,snapshot:webservices:url_mappers'.freeze }
+  let(:index_pattern) { 'snapshot:webservices:screening_list:*,snapshot:webservices:url_mappers*'.freeze }
 
   describe '.restore' do
     let(:now_string) { '2017-09-22 14:48:11 -0400' }

@@ -1,6 +1,6 @@
 module ESSnapshotManager
   def self.restore(aws_params, snapshot_name) # rubocop:disable Metrics/MethodLength
-    index_pattern = "#{Rails.env}:webservices:screening_list:*,#{Rails.env}:webservices:url_mappers"
+    index_pattern = "#{Rails.env}:webservices:screening_list:*,#{Rails.env}:webservices:url_mappers*"
     close_indices_with_open_status index_pattern
 
     repository_name = "repo_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
