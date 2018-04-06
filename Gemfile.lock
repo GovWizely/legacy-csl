@@ -27,9 +27,9 @@ GEM
       tzinfo (~> 0.3.37)
     addressable (2.5.1)
       public_suffix (~> 2.0, >= 2.0.2)
-    airbrake (6.1.1)
-      airbrake-ruby (~> 2.2, >= 2.2.5)
-    airbrake-ruby (2.2.5)
+    airbrake (7.2.1)
+      airbrake-ruby (~> 2.5)
+    airbrake-ruby (2.8.3)
     arel (4.0.2)
     ast (2.3.0)
     aws-sdk-core (2.9.21)
@@ -279,4 +279,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.15.1
+   1.15.4
