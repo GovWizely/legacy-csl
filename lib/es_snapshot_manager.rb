@@ -1,6 +1,6 @@
 module ESSnapshotManager
   def self.restore(aws_params, snapshot_name) # rubocop:disable Metrics/MethodLength
-    index_pattern = "#{Rails.env}:webservices:screening_list:*,#{Rails.env}:webservices:url_mappers"
+    index_pattern = "#{Rails.env}:webservices:screening_list:*,#{Rails.env}:webservices:url_mappers*"
     close_indices_with_open_status index_pattern
 
     repository_name = "repo_#{Time.now.strftime('%Y%m%d_%H%M%S')}"
@@ -13,6 +13,8 @@ module ESSnapshotManager
                                    indices: index_pattern,
                                  }
     end
+    replica_count = [get_data_nodes_count - 1, 0].max
+    set_number_of_replicas index_pattern, replica_count
   end
 
   def self.close_indices_with_open_status(index_pattern)
@@ -43,5 +45,18 @@ module ESSnapshotManager
         },
       },
     }
+  end
+
+  def self.set_number_of_replicas(index_pattern, replica_count)
+    ES.client.indices.put_settings index: index_pattern,
+                                   body: {
+                                     index: {
+                                       number_of_replicas: replica_count
+                                     }
+                                   }
+  end
+
+  def self.get_data_nodes_count
+    ES.client.cluster.stats['nodes']['count']['data']
   end
 end
