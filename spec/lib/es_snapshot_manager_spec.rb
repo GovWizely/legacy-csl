@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ESSnapshotManager do
-  let(:index_pattern) { 'snapshot:webservices:screening_list:*,snapshot:webservices:url_mappers'.freeze }
+  let(:index_pattern) { 'snapshot:webservices:screening_list:*,snapshot:webservices:url_mappers*'.freeze }
 
   describe '.restore' do
     let(:now_string) { '2017-09-22 14:48:11 -0400' }
@@ -9,8 +9,9 @@ describe ESSnapshotManager do
 
     before do
       allow(Rails).to receive(:env).and_return('snapshot')
-      expect(Time).to receive(:now).and_return(Time.parse(now_string))
+      allow(Time).to receive(:now).and_return(Time.parse(now_string))
       expect(described_class).to receive(:close_indices_with_open_status).with(index_pattern)
+      expect(described_class).to receive(:set_number_of_replicas).with(index_pattern, 0)
     end
 
     it 'restores snapshot' do
@@ -94,6 +95,22 @@ describe ESSnapshotManager do
         expect(ES.client.indices).not_to receive(:close).with(index: index_pattern)
         described_class.close_indices_with_open_status index_pattern
       end
+    end
+  end
+
+  describe '.set_number_of_replicas' do
+    it 'sets number of replicas for a given index_pattern' do
+      expected_put_settings_params = {
+        index: index_pattern,
+        body: {
+          index: {
+            number_of_replicas: 2
+          }
+        }
+      }
+      expect(ES.client.indices).to receive(:put_settings).with(expected_put_settings_params)
+
+      described_class.set_number_of_replicas index_pattern, 2
     end
   end
 end
